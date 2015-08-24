@@ -1,0 +1,20 @@
+Project source code explanation:
+
+1.The given project has 4 java classes : Data.java, ResultClass.java,Results.java,Servvlet.java under package name called ‘zappos’
+2.Additionally there is Jsp file named ‘Index.jsp’ which when runned allows user to enter quantity(Number of Items) and PriceLimit.
+Once the user provides the required input and hits ‘submit’ button Servvlet.java file is executed.
+3. Explanation of servvlet.java
+This class initially reads price and quantity from index.jsp file .
+Here we will construct a URL and pass it as a parameter to HttpGet(String URL) method whose function is to return content in Json format and later we convert the Json content to Java object using jsonToJava() method which is an overloaded method where one is used to extract Total Result Count while other is used to store the extracted results in an ‘ArrayList’.
+While storing the results in ArrayList we need to make sure the cost of the product should be less the user specified price limit.We had named the ArrayList as price_product1.
+Note: Here Json content is converted into Java Object using google ‘GSON’ which requires us to import additional jar file ‘google-gson-2.2.4-release.zip ‘ into our project.
+Once we have details regarding Product_id and its corresponding price we apply the algorithm and finally print the results back to the user.
+Algorithm:
+1. User enters inputs i) number of products 'n' ii) Price Limit 'P$' 2. Filter the products and consider products whose price < 'P$' 3. Sort the products in ascending order assume P1, P2 ... Px are product's price such that P1 <= P2 <= P3 ...<= Px (<= means less than or equal to) , ( Note the sequence should be in ascending order.) further Px <= (P$ + 5%) -(p1 + p2 +...+p(n-1) )
+5. So consider the result set such that
+5.1 Consider (P$ - 5%) <= P1 + P2 +...+ P(n-1) + Pk <= (P$ + 5%) Find all possible values of Pk by looping products from Pn to Px. Save the corresponding result sets (Product1 + Product2 + ....) Break from loop after finding the first max value of pk for which sum of all n products
+exceeds (P$ + 5%) 5.2 Consider (P$ - 5%) <= P2 + P3 +...+ P(n) + Pk <= (P$ + 5%) Find all possible values of Pk by looping products from P(n+1) to Px. Save the corresponding result sets (Product2 + Product3 + ....) Break from loop after finding the first max value of pk for which sum of all n products exceeds (P$ + 5%) 5.3 Consider (P$ - 5%) <= P3 + P4 +...+ P(n+1) + Pk <= (P$ + 5%) Find all possible values of Pk by looping products from P(n+2) to Px. Save the corresponding result sets (Product3 + Product4 + ....) Break from loop after finding the first max value of pk for which sum of all n products exceeds (P$ + 5%) 5.. Repeat the process till (P$ - 5%) <= P(a) + P(a+1)...+ P(a+n-1) +Pk <= (P$ + 5%) and no value for Pk is returned. break from the loop. Break from the outer loop.
+Return all the product result sets collected above
+4. Data.java and Results.java contain necessary getters and setters for processing Json content.
+5. Finally
+ResultClass.java is created to store the Product_Id and Price of extracted products.It also has compareTo() method which sorts the elements in ArrayList.
